@@ -206,7 +206,7 @@ class OktaAuth(object):
             if self.app and app_name == self.app:
                 app_choice = index
 
-        if not app_choice:
+        if app_choice is None:
             app_choice = int(input('Please select AWS app: ')) - 1
         return aws_apps[app_choice]['label'], aws_apps[app_choice]['linkUrl']
 
