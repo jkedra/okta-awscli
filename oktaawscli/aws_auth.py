@@ -29,6 +29,10 @@ class AwsAuth(object):
             self.role = parser.get(okta_profile, 'role')
             self.logger.debug("Setting AWS role to %s" % self.role)
 
+        if parser.has_option(okta_profile, 'region'):
+            self.region = parser.get(okta_profile, 'region')
+            self.logger.debug("Setting AWS region to %s" % self.region)
+
     def choose_aws_role(self, assertion):
         """ Choose AWS role from SAML assertion """
         aws_attribute_role = 'https://aws.amazon.com/SAML/Attributes/Role'
@@ -118,7 +122,7 @@ class AwsAuth(object):
 
     def write_sts_token(self, profile, access_key_id, secret_access_key, session_token):
         """ Writes STS auth information to credentials file """
-        region = 'us-east-1'
+        region = getattr(self, 'region', 'us-east-1')
         output = 'json'
         if not os.path.exists(self.creds_dir):
             os.makedirs(self.creds_dir)
